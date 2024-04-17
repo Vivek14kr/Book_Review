@@ -2,18 +2,17 @@ import { useRouter } from "next/router";
 
 const Pagination = ({ page, totalPages }) => {
   const router = useRouter();
-  const { search, limit = "10" } = router.query; // Ensure limit is treated as a string
+  const { search, limit = "10" } = router.query; 
 
   const createPageUrl = (targetPage) => {
-    // Start with the page parameter
+ 
     let url = `/?page=${targetPage}`;
 
-    // Only add the limit parameter to the URL if it's not the default value
     if (limit !== "10") {
       url += `&limit=${limit}`;
     }
 
-    // Add the search term if it exists
+   
     if (search) {
       url += `&search=${encodeURIComponent(search)}`;
     }

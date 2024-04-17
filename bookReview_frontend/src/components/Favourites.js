@@ -39,7 +39,7 @@ const Favorites = () => {
       },
       body: JSON.stringify({ bookId }),
     });
-    fetchFavorites(); // Refresh the list of favorites after removing an item
+    fetchFavorites(); 
   };
 
   const renderContent = () => {

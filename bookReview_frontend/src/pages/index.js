@@ -27,8 +27,7 @@ export const getServerSideProps = async (context) => {
     );
     const data = await res.json();
 
-    // Redirect if the page number is greater than the total pages available
-    if (pageNumber > data.totalPages) {
+     if (pageNumber > data.totalPages) {
       return {
         redirect: {
           destination: "/",

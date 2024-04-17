@@ -9,7 +9,6 @@ function signup() {
   const router = useRouter();
 
   useEffect(() => {
-    // If user is authenticated and loading is false, redirect to home page
     if (!loading && user) {
       router.push("/");
     }

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from "@/hooks/useAuth"; // Make sure to import useAuth properly
+import { useAuth } from "@/hooks/useAuth";
 
 
 const BookDetail = ({ book }) => {
-  const { isAuthenticated } = useAuth(); // Destructure to get the loading state
-  const { user } = useAuth(); // Use your authentication hook here
+  const { isAuthenticated } = useAuth(); 
+  const { user } = useAuth();
 
   const [isFavorite, setIsFavorite] = useState(false);
   const router = useRouter();
@@ -32,7 +32,7 @@ const BookDetail = ({ book }) => {
 
 const toggleFavorite = async () => {
   if (!user) {
-    router.push("/login"); // Redirect non-logged-in users to the login page
+    router.push("/login"); 
     return;
   }
 
@@ -87,7 +87,7 @@ const toggleFavorite = async () => {
           }`}
           disabled={!user}
         >
-          {isFavorite ? "♥" : "♡"} {/* Use of UTF-8 character for the heart */}
+          {isFavorite ? "♥" : "♡"} 
         </button>
       )}
     </div>

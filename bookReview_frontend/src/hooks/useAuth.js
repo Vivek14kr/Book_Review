@@ -1,7 +1,7 @@
 import { useState, useEffect, createContext, useContext } from "react";
 import { useRouter } from "next/router";
 
-// Create a context to manage user authentication state
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -38,8 +38,8 @@ const login = async (credentials) => {
       const data = await res.json();
       localStorage.setItem("token", data.token);
       setUser({ username: data.username });
-      setLoading(false); // Move setLoading(false) before router.push
-      router.push("/"); // Redirect to homepage after successful login
+      setLoading(false);
+      router.push("/"); 
     } else {
       throw new Error(data.message || "Login failed");
     }

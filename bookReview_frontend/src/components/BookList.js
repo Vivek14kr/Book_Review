@@ -21,7 +21,7 @@ const BookList = ({ books }) => {
             />
             <h3 className="text-lg font-bold mt-2">{book.title}</h3>
             <p className="text-md">{book.author}</p>
-            {/* Additional book details */}
+          
           </Link>
        
       ))}
