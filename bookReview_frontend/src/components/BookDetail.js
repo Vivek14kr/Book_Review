@@ -17,6 +17,7 @@ const BookDetail = ({ book }) => {
    }
  }, [id, user]);
 
+ //check
  const checkFavorite = async () => {
    const response = await fetch(
      `https://shy-teal-abalone-robe.cyclic.app/api/favorites/isFavorite/${id}`,
