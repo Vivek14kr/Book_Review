@@ -21,7 +21,7 @@ export const getServerSideProps = async (context) => {
     }
 
     const res = await fetch(
-      `http://localhost:3000/api/books?page=${pageNumber}&limit=${limitNumber}&search=${encodeURIComponent(
+      `https://shy-teal-abalone-robe.cyclic.app/api/books?page=${pageNumber}&limit=${limitNumber}&search=${encodeURIComponent(
         search
       )}`
     );
