@@ -40,7 +40,7 @@ const toggleFavorite = async () => {
   const method = isFavorite ? "DELETE" : "POST";
   const endpoint = isFavorite ? "remove" : "add";
   const response = await fetch(
-    `http://localhost:3000/api/favorites/${endpoint}`,
+    `https://shy-teal-abalone-robe.cyclic.app/api/favorites/${endpoint}`,
     {
       method: method,
       headers: {
