@@ -19,7 +19,7 @@ const BookDetail = ({ book }) => {
 
  const checkFavorite = async () => {
    const response = await fetch(
-     `http://localhost:3000/api/favorites/isFavorite/${id}`,
+     `https://shy-teal-abalone-robe.cyclic.app/api/favorites/isFavorite/${id}`,
      {
        headers: {
          Authorization: `Bearer ${localStorage.getItem("token")}`,
