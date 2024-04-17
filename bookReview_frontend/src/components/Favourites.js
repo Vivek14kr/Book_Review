@@ -31,7 +31,7 @@ const Favorites = () => {
   };
 
   const handleRemoveFavorite = async (bookId) => {
-    await fetch(`hhttps://shy-teal-abalone-robe.cyclic.app/api/favorites/remove`, {
+    await fetch(`https://shy-teal-abalone-robe.cyclic.app/api/favorites/remove`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
