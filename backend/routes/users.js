@@ -45,10 +45,19 @@ router.post("/login", async (req, res) => {
       const user = result.rows[0];
       const match = await bcrypt.compare(password, user.password);
       if (match) {
-        const token = jwt.sign({ userId: user.id }, process.env.SECRET_KEY, {
-          expiresIn: "1h",
-        });
-        res.json({ token });
+        // Include username in the JWT payload
+        const token = jwt.sign(
+          {
+            userId: user.id,
+            username: user.username, // Include username
+          },
+          process.env.SECRET_KEY,
+          { expiresIn: "1h" }
+        );
+
+        console.log(token, user.username)
+        
+        res.json({ token, username: user.username }); // Send username back to the client
       } else {
         res.status(401).send("Authentication failed");
       }

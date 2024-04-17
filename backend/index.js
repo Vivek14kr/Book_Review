@@ -1,15 +1,18 @@
 require("dotenv").config();
 const express = require("express");
+const cors = require("cors");
 const bodyParser = require("body-parser");
 
 
 const app = express();
+
+
 const port = process.env.PORT || 3000;
 
 
 
 app.use(bodyParser.json());
-
+app.use(cors())
 
 const favoritesRoutes = require("./routes/favorites"); 
 
@@ -17,85 +20,66 @@ const bookRoutes = require("./routes/book");
 const userRoutes = require("./routes/users");
 const pool = require("./Db/database");
 
-app.use("/books", bookRoutes);
-app.use("/users", userRoutes);
+app.use("/api/books", bookRoutes);
+app.use("/api/users", userRoutes);
 
-app.use("/favorites", favoritesRoutes);
+app.use("/api/favorites", favoritesRoutes);
 async function createTables() {
   const client = await pool.connect();
   try {
-
-    const existsBooks = await client.query(`
-      SELECT EXISTS (
-        SELECT FROM 
-          pg_tables
-        WHERE 
-          schemaname = 'public' AND 
-          tablename  = 'books'
+    // You might want to separate table existence checks if one missing table should not block others from being created.
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS books (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        author VARCHAR(255) NOT NULL,
+        genre VARCHAR(100),
+        description TEXT,
+        cover_image_url VARCHAR(500)
       );
     `);
+    console.log("Books table checked or created.");
 
-    const existsUsers = await client.query(`
-      SELECT EXISTS (
-        SELECT FROM 
-          pg_tables
-        WHERE 
-          schemaname = 'public' AND 
-          tablename  = 'users'
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(255) NOT NULL UNIQUE,
+        password VARCHAR(255) NOT NULL,
+        email VARCHAR(255) NOT NULL UNIQUE
       );
     `);
+    console.log("Users table checked or created.");
 
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS reviews (
+        id SERIAL PRIMARY KEY,
+        book_id INT NOT NULL,
+        user_id INT NOT NULL,
+        rating INT NOT NULL,
+        comment TEXT,
+        FOREIGN KEY (book_id) REFERENCES books(id),
+        FOREIGN KEY (user_id) REFERENCES users(id),
+        UNIQUE (book_id, user_id)
+      );
+    `);
+    console.log("Reviews table checked or created.");
 
-    if (!existsBooks.rows[0].exists && !existsUsers.rows[0].exists) {
-      await client.query(`
-        CREATE TABLE books (
-          id SERIAL PRIMARY KEY,
-
-          title VARCHAR(255) NOT NULL,
-          author VARCHAR(255) NOT NULL,
-          genre VARCHAR(100),
-          description TEXT,
-          cover_image_url VARCHAR(500)
-        );
-
-        CREATE TABLE users (
-          id SERIAL PRIMARY KEY,
-          username VARCHAR(255) NOT NULL UNIQUE,
-          password VARCHAR(255) NOT NULL,
-          email VARCHAR(255) NOT NULL UNIQUE
-        );
-
-        CREATE TABLE reviews (
-          id SERIAL PRIMARY KEY,
-          book_id INT NOT NULL,
-          user_id INT NOT NULL,
-          rating INT NOT NULL,
-          comment TEXT,
-          FOREIGN KEY (book_id) REFERENCES books(id),
-          FOREIGN KEY (user_id) REFERENCES users(id)
-        );
-
-        CREATE TABLE favorites (
-          user_id INT NOT NULL,
-          book_id INT NOT NULL,
-          PRIMARY KEY (user_id, book_id),
-          FOREIGN KEY (user_id) REFERENCES users(id),
-          FOREIGN KEY (book_id) REFERENCES books(id)
-        );
-      `);
-      
-      console.log("Tables created successfully");
-         await fetchAndInsertBooks(client);
-    } else {
-      console.log("Some tables already exist");
-    }
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS favorites (
+        user_id INT NOT NULL,
+        book_id INT NOT NULL,
+        PRIMARY KEY (user_id, book_id),
+        FOREIGN KEY (user_id) REFERENCES users(id),
+        FOREIGN KEY (book_id) REFERENCES books(id)
+      );
+    `);
+    console.log("Favorites table checked or created.");
   } catch (error) {
     console.error("Failed to create tables:", error);
   } finally {
     client.release();
   }
 }
-
 
 
 async function fetchAndInsertBooks(client) {

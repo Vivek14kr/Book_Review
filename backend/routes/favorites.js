@@ -58,5 +58,22 @@ router.get("/list", authenticateToken, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+// backend route to check if a book is a favorite
+router.get("/isFavorite/:bookId", authenticateToken, async (req, res) => {
+  const { userId } = req.user;
+  const { bookId } = req.params;
+
+  try {
+    const result = await pool.query(
+      "SELECT 1 FROM favorites WHERE user_id = $1 AND book_id = $2",
+      [userId, bookId]
+    );
+    const isFavorite = result.rows.length > 0; // true if the book is a favorite
+    res.json({ isFavorite }); // sending true or false
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 module.exports = router;
