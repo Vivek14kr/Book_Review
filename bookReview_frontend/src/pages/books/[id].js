@@ -9,7 +9,7 @@ export async function getServerSideProps(context) {
   const book = await resBook.json();
 
   const resReviews = await fetch(
-    `http://localhost:3000/api/books/${id}/reviews`
+    `https://shy-teal-abalone-robe.cyclic.app/api/books/${id}/reviews`
   );
   const reviews = await resReviews.json();
 
