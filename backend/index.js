@@ -11,7 +11,7 @@ const port = process.env.PORT || 3000;
 app.use(bodyParser.json());
 
 
-const favoritesRoutes = require("./routes/favorites"); // Ensure the path is correct
+const favoritesRoutes = require("./routes/favorites"); 
 
 const bookRoutes = require("./routes/book");
 const userRoutes = require("./routes/users");
@@ -24,7 +24,7 @@ app.use("/favorites", favoritesRoutes);
 async function createTables() {
   const client = await pool.connect();
   try {
-    // Check if the 'books' table exists
+
     const existsBooks = await client.query(`
       SELECT EXISTS (
         SELECT FROM 
@@ -114,8 +114,8 @@ async function fetchAndInsertBooks(client) {
     "psychology"
    
 
-  ]; // Expandable list of genres
-  const limit = 50; // Number of books to fetch per genre
+  ]; 
+  const limit = 50;
 
   for (const genre of genres) {
     const listResponse = await fetch(`${base_url}${genre}.json?limit=${limit}`);
@@ -163,7 +163,7 @@ async function fetchAndInsertBooks(client) {
   }
   console.log("Sample books data inserted successfully.");
 }
-// Verify database connection and setup tables before starting the server
+
 pool
   .connect()
   .then(async (client) => {

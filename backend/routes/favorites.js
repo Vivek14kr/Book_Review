@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const authenticateToken = require("../middleware/auth"); // Ensure this path is correct
-const pool = require("../Db/database"); // Ensure this path is correct
+const authenticateToken = require("../middleware/auth"); 
+const pool = require("../Db/database"); 
 
 // Add a book to favorites
 router.post("/add", authenticateToken, async (req, res) => {
-  const { userId } = req.user; // Assuming userID is set in the JWT payload
+  const { userId } = req.user; 
   const { bookId } = req.body;
 
   try {
@@ -16,7 +16,7 @@ router.post("/add", authenticateToken, async (req, res) => {
     res.status(201).json(result.rows[0]);
   } catch (err) {
     if (err.code === "23505") {
-      // PostgreSQL error code for unique violation
+    
       res.status(409).json({ error: "This book is already a favorite." });
     } else {
       res.status(500).json({ error: err.message });

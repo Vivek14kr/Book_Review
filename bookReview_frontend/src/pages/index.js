@@ -2,7 +2,7 @@ import React from 'react'
 
 function index() {
   return (
-    <div >index</div>
+    <div className='mt-4'>index</div>
   )
 }
 
