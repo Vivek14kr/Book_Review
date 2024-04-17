@@ -50,6 +50,7 @@ import "@fontsource/roboto/700.css"; // Specify weight
 import "@fontsource/roboto/300.css";
 
 import {GoogleAnalytics} from "nextjs-google-analytics"; // Specify weight
+import Navbar from "@/components/Navbar";
 
 
 NProgress.configure({ showSpinner: false });
@@ -71,16 +72,14 @@ const roboto = Roboto({
 });
 export default function App({ Component, pageProps }) {
   return (
-  
+    <SSRProvider>
+      {" "}
+      <main className={roboto.className}>
     
-        <SSRProvider>
-          {" "}
-          <main className={roboto.className}>
-          
-            <Component {...pageProps} />
-          </main>
-        </SSRProvider>
- 
+          <Component {...pageProps} />
+    
+      </main>
+    </SSRProvider>
   );
 
 }
