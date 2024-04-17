@@ -5,7 +5,7 @@ import ReviewForm from "@/components/ReviewForm";
 
 export async function getServerSideProps(context) {
   const { id } = context.params;
-  const resBook = await fetch(`http://localhost:3000/api/books/${id}`);
+  const resBook = await fetch(`https://shy-teal-abalone-robe.cyclic.app/api/books/${id}`);
   const book = await resBook.json();
 
   const resReviews = await fetch(
@@ -21,7 +21,7 @@ const BookDetailsPage = ({ book, reviews }) => {
 
   const updateReviews = async () => {
     const resReviews = await fetch(
-      `http://localhost:3000/api/books/${book.id}/reviews`
+      `https://shy-teal-abalone-robe.cyclic.app/api/books/${book.id}/reviews`
     );
     const updatedReviews = await resReviews.json();
     setUpdatedReviews(updatedReviews);
