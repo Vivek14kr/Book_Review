@@ -71,7 +71,7 @@ export const getServerSideProps = async (context) => {
 const Home = ({ books, page, totalPages, error }) => {
   return (
     <div>
-      <Navbar/>
+     
       <SearchBar />
       {error ? (
         <div className="text-red-500 text-center my-10">{error}</div>

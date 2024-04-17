@@ -1,4 +1,4 @@
-// pages/books/[id].js
+import React, { useState } from "react";
 import BookDetail from "@/components/BookDetail";
 import ReviewList from "@/components/ReviewList";
 import ReviewForm from "@/components/ReviewForm";
@@ -17,11 +17,21 @@ export async function getServerSideProps(context) {
 }
 
 const BookDetailsPage = ({ book, reviews }) => {
+  const [updatedReviews, setUpdatedReviews] = useState(reviews);
+
+  const updateReviews = async () => {
+    const resReviews = await fetch(
+      `http://localhost:3000/api/books/${book.id}/reviews`
+    );
+    const updatedReviews = await resReviews.json();
+    setUpdatedReviews(updatedReviews);
+  };
+
   return (
     <div className="container mx-auto px-4 mb-16">
       <BookDetail book={book} />
-      <ReviewForm bookId={book.id} />
-      <ReviewList reviews={reviews} />
+      <ReviewForm bookId={book.id} updateReviews={updateReviews} />
+      <ReviewList reviews={updatedReviews} />
     </div>
   );
 };

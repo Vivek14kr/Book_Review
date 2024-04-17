@@ -51,6 +51,8 @@ import "@fontsource/roboto/300.css";
 
 import {GoogleAnalytics} from "nextjs-google-analytics"; // Specify weight
 import Navbar from "@/components/Navbar";
+import Layout from "./Layout";
+import { AuthProvider } from "@/hooks/useAuth";
 
 
 NProgress.configure({ showSpinner: false });
@@ -75,9 +77,11 @@ export default function App({ Component, pageProps }) {
     <SSRProvider>
       {" "}
       <main className={roboto.className}>
-    
-          <Component {...pageProps} />
-    
+        <AuthProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </AuthProvider>
       </main>
     </SSRProvider>
   );

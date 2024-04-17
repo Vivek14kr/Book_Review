@@ -1,4 +1,4 @@
-// Navbar.js
+import React from "react";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -6,31 +6,51 @@ const Navbar = () => {
   const { user, logout } = useAuth();
 
   return (
-    <nav className="bg-gray-800 p-4">
-      <div className="container mx-auto flex justify-between items-center">
-        <Link href="/">
-          <a className="text-white font-semibold text-xl">Bookstore</a>
+    <nav className="bg-gray-800 p-4 text-white flex flex-wrap justify-between items-center">
+      <div className="flex flex-wrap items-center">
+        <Link
+          className="text-white px-3 py-2 rounded-md text-sm font-medium mr-4"
+          href="/"
+        >
+          Home
         </Link>
-        <div>
-          {user ? (
-            <>
-              <span className="text-white mr-4">{user.username}</span>
-              <button onClick={logout} className="text-white underline">
-                Logout
-              </button>
-            </>
-          ) : (
-            <>
-              <Link href="/login">
-                <a className="text-white mr-4">Login</a>
-              </Link>
-              <Link href="/signup">
-                <a className="text-white">Sign Up</a>
-              </Link>
-            </>
-          )}
-        </div>
+        {user && (
+          <Link
+            className="text-white px-3 py-2 rounded-md text-sm font-medium mr-4"
+            href="/my-favourites"
+          >
+            Favorite
+          </Link>
+        )}
       </div>
+      {user ? (
+        <div className="flex items-center">
+          <span className="text-sm mr-4 hidden sm:inline">
+            Hello, {user.username}
+          </span>
+          <button
+            onClick={logout}
+            className="px-3 py-2 bg-gray-700 rounded-md text-sm font-medium whitespace-nowrap"
+          >
+            Logout
+          </button>
+        </div>
+      ) : (
+        <div className="flex">
+          <Link
+            className="text-white px-3 py-2 rounded-md text-sm font-medium mr-4"
+            href="/login"
+          >
+            Login
+          </Link>
+          <Link
+            className="text-white px-3 py-2 rounded-md text-sm font-medium"
+            href="/sign-up"
+          >
+         Signup
+          </Link>
+        </div>
+      )}
     </nav>
   );
 };

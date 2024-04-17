@@ -1,5 +1,6 @@
 import { useState } from "react";
-
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/router";
 const StarRating = ({ rating, onRatingChange }) => {
   const handleRating = (rate) => {
     onRatingChange(rate);
@@ -26,11 +27,14 @@ const StarRating = ({ rating, onRatingChange }) => {
   );
 };
 
-const ReviewForm = ({ bookId }) => {
+const ReviewForm = ({ bookId, updateReviews }) => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [errors, setErrors] = useState({});
 
+  let [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const { user } = useAuth();
   const validateForm = () => {
     let tempErrors = {};
     if (!rating) {
@@ -46,11 +50,45 @@ const ReviewForm = ({ bookId }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!validateForm()) return;
+    if (!user) {
+      router.push("/login");
+      return;
+    }
 
-    console.log("Submit review:", { bookId, rating, comment });
-    setRating(0);
-    setComment("");
-    setErrors({});
+    // Prepare request data
+    const formData = { rating, comment };
+
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `http://localhost:3000/api/books/${bookId}/reviews`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // Pass the token
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to submit review");
+      }
+
+      // Reset form after successful submission
+      setRating(0);
+      setComment("");
+      setErrors({});
+      setLoading(false);
+      updateReviews();
+    } catch (error) {
+      console.error("Error submitting review:", error);
+      setLoading(false);
+      setErrors({
+        apiError: "Failed to submit review. Please try again later.",
+      });
+    }
   };
 
   return (
@@ -88,12 +126,15 @@ const ReviewForm = ({ bookId }) => {
           <p className="text-red-500 text-xs mt-1">{errors.comment}</p>
         )}
       </div>
-
+      {errors.apiError && (
+        <p className="text-red-500 text-xs mt-2">{errors.apiError}</p>
+      )}
       <button
         type="submit"
         className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+        disabled={loading}
       >
-        Submit Review
+        {loading ? "Submitting..." : "Submit Review"}
       </button>
     </form>
   );

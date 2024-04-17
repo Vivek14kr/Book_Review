@@ -1,45 +1,94 @@
-// useAuth.js
-import { useState } from "react";
+import { useState, useEffect, createContext, useContext } from "react";
 import { useRouter } from "next/router";
-import { signUpApi, loginApi } from "@/api/auth"; // Implement these API functions
 
-export const useAuth = () => {
+// Create a context to manage user authentication state
+const AuthContext = createContext();
+
+export const AuthProvider = ({ children }) => {
   const router = useRouter();
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const login = async (credentials) => {
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decodedToken = parseJwt(token);
+      setUser({ username: decodedToken.username });
+    }
+  }, []);
+
+  const parseJwt = (token) => {
     try {
-      const token = await loginApi(credentials);
-      localStorage.setItem("token", token);
-      // Fetch user info and set user state
-      // setUser(userInfo);
-      router.push("/");
-    } catch (error) {
-      console.error("Login error:", error);
+      return JSON.parse(atob(token.split(".")[1]));
+    } catch (e) {
+      return null;
     }
   };
 
+const login = async (credentials) => {
+  setLoading(true);
+  try {
+    const res = await fetch("http://localhost:3000/api/users/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(credentials),
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      localStorage.setItem("token", data.token);
+      setUser({ username: data.username });
+      setLoading(false); // Move setLoading(false) before router.push
+      router.push("/"); // Redirect to homepage after successful login
+    } else {
+      throw new Error(data.message || "Login failed");
+    }
+  } catch (error) {
+    console.error("Login error:", error);
+    setLoading(false); // Move setLoading(false) to handle error case
+    setError(error.message); // Set error message
+  }
+};
+
   const signUp = async (userData) => {
+    setLoading(true);
     try {
-      await signUpApi(userData);
-      router.push("/login");
+      const res = await fetch("http://localhost:3000/api/users/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+      });
+      if (res.ok) {
+        router.push("/login");
+      } else {
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Signup failed");
+      }
     } catch (error) {
       console.error("Sign up error:", error);
     }
+    setLoading(false);
   };
 
   const logout = () => {
     localStorage.removeItem("token");
-    // Clear user state
-    // setUser(null);
+    setUser(null);
     router.push("/login");
   };
 
-  // Check if user is authenticated
   const isAuthenticated = () => {
     const token = localStorage.getItem("token");
     return !!token;
   };
 
-  return { user, login, signUp, logout, isAuthenticated };
+  return (
+    <AuthContext.Provider
+      value={{ user, login, signUp, logout, isAuthenticated, loading }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 };
+
+// Custom hook to consume the AuthContext
+export const useAuth = () => useContext(AuthContext);
