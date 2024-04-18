@@ -10,8 +10,8 @@ const pool = require("../Db/database");
 router.post(
   "/register",
   [
-    body("username").isLength({ min: 5 }),
-    body("password").isLength({ min: 6 }),
+    body("username").isLength({ min: 1 }),
+    body("password").isLength({ min: 1 }),
     body("email").isEmail(),
   ],
   async (req, res) => {
