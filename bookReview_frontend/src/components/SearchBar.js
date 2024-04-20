@@ -11,17 +11,33 @@ const SearchBar = () => {
   // Wrap the debounced function in a useCallback hook to memoize it across re-renders
   const debouncedSearch = useCallback(
     debounce((query) => {
-      const queryParams = {
-        page: "1",
-        ...(sort && { sort }),
-        ...(order && { order }),
-        ...(query && { search: query }),
-      };
 
-      router.push({
-        pathname: "/",
-        query: queryParams,
-      });
+      if (query && query.length === 0){
+         const queryParams = {
+  
+           ...(sort && { sort }),
+           ...(order && { order }),
+           ...(query && { search: query }),
+         };
+         router.push({
+           pathname: "/",
+           query: queryParams,
+         });
+      }
+
+      else if (query && query.length > 2) {
+        const queryParams = {
+          page: "1",
+          ...(sort && { sort }),
+          ...(order && { order }),
+          ...(query && { search: query }),
+        };
+
+        router.push({
+          pathname: "/",
+          query: queryParams,
+        });
+      }
     }, 300),
     [sort, order, router] // Dependencies should include values from router query to re-create the debounced function when they change
   );
