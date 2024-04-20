@@ -77,7 +77,12 @@ const Home = ({ books, page, totalPages, error, sort, order }) => {
     // Redirect or push a new URL with updated query parameters
     router.push({
       pathname: "/",
-      query: { page, sort: newSort, order: newOrder },
+      query: {
+        page: 1,
+        sort: newSort,
+        order: newOrder,
+        ...(search && { search }),
+      },
     });
   };
   return (
