@@ -3,23 +3,37 @@ import { useRouter } from "next/router";
 import { debounce } from "lodash";
 
 const SearchBar = () => {
-  const [input, setInput] = useState("");
   const router = useRouter();
+  const { search, page, sort, order } = router.query;
 
- 
-  const debouncedSearch = debounce((query) => {
-    if (query.length === 0) {
-      router.push(`/`);
-    } else if (query.length > 2) {
-      router.push(`/?search=${encodeURIComponent(query)}`);
-    }
+  const [input, setInput] = useState(search || "");
+
+    const debouncedSearch = debounce((query) => {
+    const queryParam = {
+      page, 
+      sort, 
+      order, 
+      ...(query && { search: query }), 
+    };
+    Object.keys(queryParam).forEach((key) => {
+      if (!queryParam[key]) {
+        delete queryParam[key];
+      }
+    });
+    router.push({
+      pathname: "/",
+      query: queryParam,
+    });
   }, 300);
 
   useEffect(() => {
+    if (search) {
+      setInput(search);
+    }
     return () => {
-      debouncedSearch.cancel(); 
+      debouncedSearch.cancel();
     };
-  }, []);
+  }, [search]);
 
   const handleSearch = (event) => {
     setInput(event.target.value);
