@@ -20,7 +20,7 @@ const BookDetail = ({ book }) => {
  //check
  const checkFavorite = async () => {
    const response = await fetch(
-     `https://shy-teal-abalone-robe.cyclic.app/api/favorites/isFavorite/${id}`,
+     `http://localhost:3000/api/favorites/isFavorite/${id}`,
      {
        headers: {
          Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -40,7 +40,7 @@ const toggleFavorite = async () => {
   const method = isFavorite ? "DELETE" : "POST";
   const endpoint = isFavorite ? "remove" : "add";
   const response = await fetch(
-    `https://shy-teal-abalone-robe.cyclic.app/api/favorites/${endpoint}`,
+    `http://localhost:3000/api/favorites/${endpoint}`,
     {
       method: method,
       headers: {

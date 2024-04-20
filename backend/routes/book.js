@@ -18,21 +18,31 @@ router.get("/", async (req, res) => {
     search = "",
   } = req.query;
   const offset = (page - 1) * limit;
+  const validSorts = ["id", "title", "author", "genre", "average_rating"];
+  const sortColumn = validSorts.includes(sort) ? sort : "id";
 
-  // Building the WHERE clause dynamically based on search input
   const searchConditions = [];
   if (search) {
     const searchPattern = `%${search}%`;
-    searchConditions.push(`title ILIKE '${searchPattern}'`);
-    searchConditions.push(`author ILIKE '${searchPattern}'`);
-    searchConditions.push(`genre ILIKE '${searchPattern}'`);
+    searchConditions.push(`books.title ILIKE '${searchPattern}'`);
+    searchConditions.push(`books.author ILIKE '${searchPattern}'`);
+    searchConditions.push(`books.genre ILIKE '${searchPattern}'`);
   }
 
   const whereClause =
     searchConditions.length > 0 ? `WHERE ${searchConditions.join(" OR ")}` : "";
 
   try {
-    const booksQuery = `SELECT * FROM books ${whereClause} ORDER BY ${sort} ${order} LIMIT $1 OFFSET $2`;
+    const booksQuery = `
+      SELECT books.*, COALESCE(AVG(reviews.rating), 0) AS average_rating
+      FROM books
+      LEFT JOIN reviews ON reviews.book_id = books.id
+      ${whereClause}
+      GROUP BY books.id
+      ORDER BY ${sortColumn} ${order}
+      LIMIT $1 OFFSET $2
+    `;
+
     const booksResult = await pool.query(booksQuery, [limit, offset]);
 
     const countQuery = `SELECT COUNT(*) FROM books ${whereClause}`;
@@ -56,6 +66,7 @@ router.get("/", async (req, res) => {
     });
   }
 });
+
 
 
 

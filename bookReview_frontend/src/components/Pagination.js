@@ -2,23 +2,19 @@ import { useRouter } from "next/router";
 
 const Pagination = ({ page, totalPages }) => {
   const router = useRouter();
-  const { search, limit = "10" } = router.query; 
+ const { search, sort, order, limit = "10" } = router.query;
 
-  const createPageUrl = (targetPage) => {
- 
-    let url = `/?page=${targetPage}`;
+ const createPageUrl = (targetPage) => {
+   const queryParams = new URLSearchParams({
+     page: targetPage,
+     limit,
+     ...(search && { search }),
+     ...(sort && { sort }),
+     ...(order && { order }),
+   });
 
-    if (limit !== "10") {
-      url += `&limit=${limit}`;
-    }
-
-   
-    if (search) {
-      url += `&search=${encodeURIComponent(search)}`;
-    }
-
-    return url;
-  };
+   return `/?${queryParams.toString()}`;
+ };
 
   return (
     <div className="flex justify-center items-center space-x-2 my-4">

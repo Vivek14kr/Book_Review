@@ -18,7 +18,7 @@ const Favorites = () => {
  }, [router]);
 
   const fetchFavorites = async () => {
-    const response = await fetch("https://shy-teal-abalone-robe.cyclic.app/api/favorites/list", {
+    const response = await fetch("http://localhost:3000/api/favorites/list", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -31,7 +31,7 @@ const Favorites = () => {
   };
 
   const handleRemoveFavorite = async (bookId) => {
-    await fetch(`https://shy-teal-abalone-robe.cyclic.app/api/favorites/remove`, {
+    await fetch(`http://localhost:3000/api/favorites/remove`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
