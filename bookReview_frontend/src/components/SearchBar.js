@@ -14,21 +14,16 @@ const debouncedSearch = debounce((query) => {
     const queryParams = new URLSearchParams();
 
     queryParams.set("page", "1");
-    if (sort && order) {
-      queryParams.set("sort", sort);
-      queryParams.set("order", order);
-    }
-    if (query) {
-      queryParams.set("search", encodeURIComponent(query));
-    }
+    if (sort) queryParams.set("sort", sort);
+    if (order) queryParams.set("order", order);
+    if (query) queryParams.set("search", query); // No need for encodeURIComponent here
 
     router.push({
       pathname: "/",
-      query: queryParams.toString(),
+      search: queryParams.toString(), // Make sure to use `search` not `query` here
     });
   }
 }, 300);
-
 
   useEffect(() => {
    setInput(search || "");
