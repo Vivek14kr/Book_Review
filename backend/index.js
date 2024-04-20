@@ -27,8 +27,7 @@ app.use("/api/favorites", favoritesRoutes);
 async function createTables() {
   const client = await pool.connect();
   try {
-    // You might want to separate table existence checks if one missing table should not block others from being created.
-    await client.query(`
+     await client.query(`
       CREATE TABLE IF NOT EXISTS books (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
@@ -106,13 +105,13 @@ async function fetchAndInsertBooks(client) {
     const listData = await listResponse.json();
 
     for (const book of listData.works) {
-      const detailsUrl = `https://openlibrary.org${book.key}.json`; // Fetching each book's detailed info
+      const detailsUrl = `https://openlibrary.org${book.key}.json`; 
       const detailsResponse = await fetch(detailsUrl);
       const details = await detailsResponse.json();
 
       const title = details.title;
 
-      // Extracting author names from the details; handling missing data
+    
       const author =
         details.authors && details.authors.length > 0
           ? await Promise.all(

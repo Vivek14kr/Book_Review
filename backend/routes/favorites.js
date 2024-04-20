@@ -68,8 +68,8 @@ router.get("/isFavorite/:bookId", authenticateToken, async (req, res) => {
       "SELECT 1 FROM favorites WHERE user_id = $1 AND book_id = $2",
       [userId, bookId]
     );
-    const isFavorite = result.rows.length > 0; // true if the book is a favorite
-    res.json({ isFavorite }); // sending true or false
+    const isFavorite = result.rows.length > 0; 
+    res.json({ isFavorite }); 
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

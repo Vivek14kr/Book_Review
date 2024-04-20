@@ -45,11 +45,11 @@ router.post("/login", async (req, res) => {
       const user = result.rows[0];
       const match = await bcrypt.compare(password, user.password);
       if (match) {
-        // Include username in the JWT payload
+    
         const token = jwt.sign(
           {
             userId: user.id,
-            username: user.username, // Include username
+            username: user.username, 
           },
           process.env.SECRET_KEY,
           { expiresIn: "1h" }
@@ -57,7 +57,7 @@ router.post("/login", async (req, res) => {
 
         console.log(token, user.username)
         
-        res.json({ token, username: user.username }); // Send username back to the client
+        res.json({ token, username: user.username }); 
       } else {
         res.status(401).send("Authentication failed");
       }

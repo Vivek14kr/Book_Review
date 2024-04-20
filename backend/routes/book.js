@@ -8,7 +8,7 @@ const pool = require("../Db/database");
 
 
 // List books with optional pagination and sorting
-// Adjust your existing router.get("/") to include search logic
+
 router.get("/", async (req, res) => {
   const {
     page = 1,
@@ -63,11 +63,11 @@ router.get("/", async (req, res) => {
 
 // Search books
 router.get("/search", async (req, res) => {
-  // The search term is expected to be in the 'query' query parameter.
+
   const { query } = req.query;
 
   try {
-    // Construct the SQL query to search for the term in all three columns.
+  
     const searchQuery = `
       SELECT * FROM books
       WHERE 
@@ -76,16 +76,16 @@ router.get("/search", async (req, res) => {
         genre ILIKE $1
     `;
 
-    // The same search term is used for title, author, and genre.
+ 
     const searchValues = [`%${query}%`];
 
-    // Execute the query.
+
     const result = await pool.query(searchQuery, searchValues);
 
-    // Respond with the search result.
+  
     res.json(result.rows);
   } catch (err) {
-    // Handle any errors that occur during the query.
+
     res.status(500).json({ error: err.message });
   }
 });
@@ -114,26 +114,26 @@ router.post(
     body("comment").isLength({ min: 1 }),
   ],
   async (req, res) => {
-    const { id } = req.params; // book id
+    const { id } = req.params; 
     const { rating, comment } = req.body;
     console.log(req.user, " line 119")
-    const user_id = req.user.userId; // Assume this comes from authentication token
+    const user_id = req.user.userId; 
 
     try {
-      // Check if the review already exists
+   
       const existingReview = await pool.query(
         "SELECT id FROM reviews WHERE book_id = $1 AND user_id = $2",
         [id, user_id]
       );
 
       if (existingReview.rows.length > 0) {
-        // Review already exists
+    
         return res
           .status(400)
           .json({ message: "You have already reviewed this book." });
       }
 
-      // Insert the new review
+
       const result = await pool.query(
         "INSERT INTO reviews (book_id, user_id, rating, comment) VALUES ($1, $2, $3, $4) RETURNING *",
         [id, user_id, rating, comment]
@@ -147,35 +147,35 @@ router.post(
 );
 
 
-// Add a new GET route to fetch reviews for a specific book
+
 router.get("/:id/reviews", async (req, res) => {
-  const { id } = req.params; // Get the book ID from the route parameter
+  const { id } = req.params; 
 
   try {
-    // Query the database to get all reviews for the specified book ID
+   
    const result = await pool.query(
      `SELECT reviews.*, users.username
        FROM reviews
        INNER JOIN users ON users.id = reviews.user_id
        WHERE reviews.book_id = $1
-       ORDER BY reviews.id DESC`, // Order by review ID for consistency
+       ORDER BY reviews.id DESC`, 
      [id]
    );
 
     if (result.rows.length > 0) {
-      // If there are reviews, return them
+   
   res.json(
     result.rows.map((review) => ({
       ...review,
-      username: review.username || "Anonymous", // Use the username or 'Anonymous' if not present
+      username: review.username || "Anonymous", 
     }))
   );
     } else {
-      // If no reviews are found, return an empty array with a 404 status
+
       res.status(404).json({ message: "No reviews found for this book." });
     }
   } catch (err) {
-    // Handle any database or server errors
+ 
     console.error("Error fetching reviews:", err);
     res.status(500).json({ error: "Failed to fetch reviews." });
   }
