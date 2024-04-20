@@ -77,6 +77,8 @@ router.get("/search", async (req, res) => {
 
   const { query } = req.query;
 
+  console.log(query, " : query")
+
   try {
   
     const searchQuery = `
