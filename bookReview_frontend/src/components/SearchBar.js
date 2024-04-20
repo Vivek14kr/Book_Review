@@ -17,7 +17,7 @@ const SearchBar = () => {
   
            ...(sort && { sort }),
            ...(order && { order }),
-           ...(query && { search: query }),
+   
          };
          router.push({
            pathname: "/",
