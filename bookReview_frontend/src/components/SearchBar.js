@@ -9,23 +9,29 @@ const SearchBar = () => {
   const [input, setInput] = useState(search || "");
 
 
-    const debouncedSearch = debounce((query) => {
-    const queryParam = {
-      page, 
-      sort, 
-      order, 
-      ...(query && { search: query }), 
-    };
-    Object.keys(queryParam).forEach((key) => {
-      if (!queryParam[key]) {
-        delete queryParam[key];
-      }
-    });
-    router.push({
-      pathname: "/",
-      query: queryParam,
-    });
-  }, 300);
+ const debouncedSearch = debounce((query) => {
+   if (query.length >= 3 || query.length === 0) {
+     const queryParam = {
+       page: 1,
+       sort,
+       order,
+       ...(query && { search: encodeURIComponent(query) }), 
+     };
+
+  
+     Object.keys(queryParam).forEach((key) => {
+       if (!queryParam[key]) {
+         delete queryParam[key];
+       }
+     });
+
+
+     router.push({
+       pathname: "/",
+       query: queryParam,
+     });
+   }
+ }, 300);
 
   useEffect(() => {
    setInput(search || "");
