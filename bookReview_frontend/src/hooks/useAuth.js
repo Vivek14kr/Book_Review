@@ -50,25 +50,32 @@ const login = async (credentials) => {
   }
 };
 
-  const signUp = async (userData) => {
-    setLoading(true);
-    try {
-      const res = await fetch("https://shy-teal-abalone-robe.cyclic.app/api/users/register", {
+const signUp = async (userData) => {
+  setLoading(true);
+  try {
+    const res = await fetch(
+      "https://shy-teal-abalone-robe.cyclic.app/api/users/register",
+      {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
-      });
-      if (res.ok) {
-        router.push("/login");
-      } else {
-        const errorData = await res.json();
-        throw new Error(errorData.message || "Signup failed");
       }
-    } catch (error) {
-      console.error("Sign up error:", error);
+    );
+
+    const data = await res.json(); 
+
+    if (res.ok) {
+      router.push("/login");
+    } else {
+      throw new Error(data.message || "Signup failed");
     }
-    setLoading(false);
-  };
+  } catch (error) {
+    console.error("Sign up error:", error.message);
+    throw error;
+  } finally {
+    setLoading(false); 
+  }
+};
 
   const logout = () => {
     localStorage.removeItem("token");

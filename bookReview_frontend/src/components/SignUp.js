@@ -18,20 +18,16 @@ const Signup = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await signUp(formData);
-      router.push("/login");
-    } catch (err) {
-            setError("Invalid Credentials. Please try again");
-      setError({
-    username: "",
-    email: "",
-    password: "",
-  });
-    }
-  };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError(""); // Reset error message before the new attempt
+  try {
+    await signUp(formData);
+    router.push("/login");
+  } catch (err) {
+    setError(err.message || "An unexpected error occurred. Please try again."); // Display actual error message
+  }
+};
 
   return (
     <div className="flex flex-col justify-center py-12 sm:px-6 lg:px-8">
