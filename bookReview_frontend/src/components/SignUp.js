@@ -25,7 +25,7 @@ const handleSubmit = async (e) => {
     await signUp(formData);
     router.push("/login");
   } catch (err) {
-    setError(err.message || "An unexpected error occurred. Please try again."); // Display actual error message
+    setError("User already exist or Invalid credentials. Please Try Again "); // Display actual error message
   }
 };
 
