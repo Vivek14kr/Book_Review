@@ -12,7 +12,7 @@ const SearchBar = () => {
   const debouncedSearch = useCallback(
     debounce((query) => {
 
-      if (query && query.length === 0){
+      if (query.length === 0){
          const queryParams = {
   
            ...(sort && { sort }),
