@@ -71,6 +71,7 @@ export const getServerSideProps = async (context) => {
 
 const Home = ({ books, page, totalPages, error, sort, order }) => {
   const router = useRouter();
+  const { search } = router.query;
 
   const handleSortChange = (event) => {
     const [newSort, newOrder] = event.target.value.split(" ");
