@@ -10,20 +10,18 @@ const SearchBar = () => {
 
 
 const debouncedSearch = debounce((query) => {
-
   if (query.length >= 3 || query.length === 0) {
     const queryParams = new URLSearchParams();
 
-    if (query.length > 0) {
-      queryParams.set("search", query);
-    }
     queryParams.set("page", "1");
     if (sort && order) {
       queryParams.set("sort", sort);
       queryParams.set("order", order);
     }
+    if (query) {
+      queryParams.set("search", encodeURIComponent(query));
+    }
 
-   
     router.push({
       pathname: "/",
       query: queryParams.toString(),
