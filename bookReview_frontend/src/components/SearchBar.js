@@ -8,6 +8,7 @@ const SearchBar = () => {
 
   const [input, setInput] = useState(search || "");
 
+
     const debouncedSearch = debounce((query) => {
     const queryParam = {
       page, 
@@ -27,14 +28,13 @@ const SearchBar = () => {
   }, 300);
 
   useEffect(() => {
-    if (search) {
-      setInput(search);
-    }
+   setInput(search || "");
     return () => {
       debouncedSearch.cancel();
     };
   }, [search]);
 
+ 
   const handleSearch = (event) => {
     setInput(event.target.value);
     debouncedSearch(event.target.value);
