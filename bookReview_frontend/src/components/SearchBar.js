@@ -40,9 +40,9 @@ const SearchBar = () => {
   };
 
   useEffect(() => {
-    if (search) {
-      setInput(search);
-    }
+
+      setInput(search  || "");
+   
   }, [search]);
 
   return (
