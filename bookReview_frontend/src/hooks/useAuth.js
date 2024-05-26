@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
 const login = async (credentials) => {
   setLoading(true);
   try {
-    const res = await fetch("https://shy-teal-abalone-robe.cyclic.app/api/users/login", {
+    const res = await fetch("https://book-review-l8xo.onrender.com/api/users/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(credentials),
@@ -54,7 +54,7 @@ const signUp = async (userData) => {
   setLoading(true);
   try {
     const res = await fetch(
-      "https://shy-teal-abalone-robe.cyclic.app/api/users/register",
+      "https://book-review-l8xo.onrender.com/api/users/register",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

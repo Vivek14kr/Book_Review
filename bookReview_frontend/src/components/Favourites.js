@@ -18,7 +18,7 @@ const Favorites = () => {
  }, [router]);
 
   const fetchFavorites = async () => {
-    const response = await fetch("https://shy-teal-abalone-robe.cyclic.app/api/favorites/list", {
+    const response = await fetch("https://book-review-l8xo.onrender.com/api/favorites/list", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -31,14 +31,17 @@ const Favorites = () => {
   };
 
   const handleRemoveFavorite = async (bookId) => {
-    await fetch(`https://shy-teal-abalone-robe.cyclic.app/api/favorites/remove`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify({ bookId }),
-    });
+    await fetch(
+      `https://book-review-l8xo.onrender.com/api/favorites/remove`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ bookId }),
+      }
+    );
     fetchFavorites(); 
   };
 

@@ -61,7 +61,7 @@ const ReviewForm = ({ bookId, updateReviews }) => {
     try {
       setLoading(true);
       const response = await fetch(
-        `https://shy-teal-abalone-robe.cyclic.app/api/books/${bookId}/reviews`,
+        `https://book-review-l8xo.onrender.com/api/books/${bookId}/reviews`,
         {
           method: "POST",
           headers: {

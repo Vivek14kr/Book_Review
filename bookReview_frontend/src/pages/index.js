@@ -21,7 +21,7 @@ export const getServerSideProps = async (context) => {
   try {
     // Make a fetch call with additional sorting parameters
     const res = await fetch(
-      `https://shy-teal-abalone-robe.cyclic.app/api/books?page=${pageNumber}&limit=${limitNumber}&search=${encodeURIComponent(
+      `https://book-review-l8xo.onrender.com/api/books?page=${pageNumber}&limit=${limitNumber}&search=${encodeURIComponent(
         search
       )}&sort=${sort}&order=${order}`
     );
