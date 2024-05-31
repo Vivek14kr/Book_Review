@@ -18,7 +18,7 @@ const Favorites = () => {
  }, [router]);
 
   const fetchFavorites = async () => {
-    const response = await fetch("https://book-review-l8xo.onrender.com/api/favorites/list", {
+    const response = await fetch("https://new-app-book-a35b9b70edee.herokuapp.com/api/favorites/list", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -32,7 +32,7 @@ const Favorites = () => {
 
   const handleRemoveFavorite = async (bookId) => {
     await fetch(
-      `https://book-review-l8xo.onrender.com/api/favorites/remove`,
+      `https://new-app-book-a35b9b70edee.herokuapp.com/api/favorites/remove`,
       {
         method: "DELETE",
         headers: {

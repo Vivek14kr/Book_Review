@@ -61,7 +61,7 @@ const ReviewForm = ({ bookId, updateReviews }) => {
     try {
       setLoading(true);
       const response = await fetch(
-        `https://book-review-l8xo.onrender.com/api/books/${bookId}/reviews`,
+        `https://new-app-book-a35b9b70edee.herokuapp.com/api/books/${bookId}/reviews`,
         {
           method: "POST",
           headers: {

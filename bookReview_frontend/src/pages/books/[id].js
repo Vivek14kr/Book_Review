@@ -5,11 +5,11 @@ import ReviewForm from "@/components/ReviewForm";
 
 export async function getServerSideProps(context) {
   const { id } = context.params;
-  const resBook = await fetch(`https://book-review-l8xo.onrender.com/api/books/${id}`);
+  const resBook = await fetch(`https://new-app-book-a35b9b70edee.herokuapp.com/api/books/${id}`);
   const book = await resBook.json();
 
   const resReviews = await fetch(
-    `https://book-review-l8xo.onrender.com/api/books/${id}/reviews`
+    `https://new-app-book-a35b9b70edee.herokuapp.com/api/books/${id}/reviews`
   );
   const reviews = await resReviews.json();
 
@@ -21,7 +21,7 @@ const BookDetailsPage = ({ book, reviews }) => {
 
   const updateReviews = async () => {
     const resReviews = await fetch(
-      `https://book-review-l8xo.onrender.com/api/books/${book.id}/reviews`
+      `https://new-app-book-a35b9b70edee.herokuapp.com/api/books/${book.id}/reviews`
     );
     const updatedReviews = await resReviews.json();
     setUpdatedReviews(updatedReviews);

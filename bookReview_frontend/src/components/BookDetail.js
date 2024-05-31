@@ -20,7 +20,7 @@ const BookDetail = ({ book }) => {
  //check
  const checkFavorite = async () => {
    const response = await fetch(
-     `https://book-review-l8xo.onrender.com/api/favorites/isFavorite/${id}`,
+     `https://new-app-book-a35b9b70edee.herokuapp.com/api/favorites/isFavorite/${id}`,
      {
        headers: {
          Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -40,7 +40,7 @@ const toggleFavorite = async () => {
   const method = isFavorite ? "DELETE" : "POST";
   const endpoint = isFavorite ? "remove" : "add";
   const response = await fetch(
-    `https://book-review-l8xo.onrender.com/api/favorites/${endpoint}`,
+    `https://new-app-book-a35b9b70edee.herokuapp.com/api/favorites/${endpoint}`,
     {
       method: method,
       headers: {
